@@ -19,6 +19,9 @@
   * readings received for the cargo
   */
 
+/**
+  * Change namespaceś name
+  */
 namespace org.acme.shipping.wiki_perishable
 
 /**

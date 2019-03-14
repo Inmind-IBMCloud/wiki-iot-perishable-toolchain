@@ -13,6 +13,10 @@
  */
 
 /**
+  * Change namespaceś name
+  */
+
+/**
  * A shipment has been received by an importer
  * @param {org.acme.shipping.wiki_perishable.ShipmentReceived} shipmentReceived - the ShipmentReceived transaction
  * @transaction
