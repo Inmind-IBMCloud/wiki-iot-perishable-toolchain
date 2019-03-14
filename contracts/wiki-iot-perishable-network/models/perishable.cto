@@ -13,13 +13,13 @@
  */
 
 /**
- * A business network for shipping perishable goods
- * The cargo is temperature controlled and contracts
- * can be negociated based on the temperature
- * readings received for the cargo
- */
+  * A business network for shipping perishable goods
+  * The cargo is temperature controlled and contracts
+  * can be negociated based on the temperature
+  * readings received for the cargo
+  */
 
-namespace org.acme.shipping.perishable
+namespace org.acme.shipping.wiki_perishable
 
 /**
  * The type of perishable product being shipped
@@ -30,6 +30,7 @@ enum ProductType {
   o PEARS
   o PEACHES
   o COFFEE
+  o MEDICINE
 }
 
 /**
@@ -41,42 +42,68 @@ enum ShipmentStatus {
   o ARRIVED
 }
 
-/** 
- * Directions of the compass 
- */ 
-enum CompassDirection { 
-  o N 
-  o S 
-  o E 
-  o W 
+/**
+ * Directions of the compass
+ */
+enum CompassDirection {
+  o N
+  o S
+  o E
+  o W
 }
 
 /**
  * An abstract transaction that is related to a Shipment
  */
 abstract transaction ShipmentTransaction {
-  --> Shipment shipment
+    --> Shipment shipment
+}
+
+/**
+ * An Accelerometer reading for a shipment. E.g. received from a
+ * device within an accelerometer controlled shipping container
+ * 
+ * The combination of the accelerometer environment reading,
+ * PLUS the GPS location, PLUS the timestamp is what is interesting
+ * Just knowing temperature without knowing where or when is
+ * not sufficient.
+ */
+transaction AccelReading extends ShipmentTransaction {
+  o Double accel_x
+  o Double accel_y
+  o Double accel_z
+  o String latitude
+  o String longitude
+  o String readingTime
 }
 
 /**
  * An temperature reading for a shipment. E.g. received from a
  * device within a temperature controlled shipping container
+ * 
+ * The combination of the temperature environment reading,
+ * PLUS the GPS location, PLUS the timestamp is what is interesting
+ * Just knowing temperature without knowing where or when is
+ * not sufficient.
  */
 transaction TemperatureReading extends ShipmentTransaction {
-  o Double centigrade
+  o Double celsius
+  o String latitude
+  o String longitude
+  o String readingTime
 }
 
-/** 
- * A GPS reading for a shipment. E.g. received from a device 
- * within a shipping container 
- */ 
-transaction GpsReading extends ShipmentTransaction { 
-  o String readingTime 
-  o String readingDate 
-  o String latitude 
-  o CompassDirection latitudeDir 
-  o String longitude 
-  o CompassDirection longitudeDir 
+/**
+ * A GPS reading for a shipment. E.g. received from a device
+ * within a shipping container
+ */
+transaction GpsReading extends ShipmentTransaction {
+  o String readingTime
+  o String readingDate
+  o String latitude
+  o CompassDirection latitudeDir
+  o String longitude
+  o CompassDirection longitudeDir
 }
 
 /**
@@ -95,9 +122,10 @@ asset Shipment identified by shipmentId {
   o ProductType type
   o ShipmentStatus status
   o Long unitCount
-  o TemperatureReading[] temperatureReadings optional
-  o GpsReading[] gpsReadings optional
   --> Contract contract
+  o TemperatureReading[] temperatureReadings optional
+  o AccelReading[] AccelReadings optional
+  o GpsReading[] gpsReadings optional
 }
 
 /**
@@ -117,6 +145,7 @@ asset Contract identified by contractId {
   o Double maxTemperature
   o Double minPenaltyFactor
   o Double maxPenaltyFactor
+  o Double maxAccel
 }
 
 /**
@@ -157,24 +186,41 @@ participant Importer extends Business {
 }
 
 /**
+ * JUST FOR INITIALIZING A DEMO
+ */
+transaction SetupDemo {
+}
+
+/**
  * An event - when the temperature goes outside the agreed-upon boundaries
  */
 event TemperatureThresholdEvent {
   o String message
   o Double temperature
+  o String latitude
+  o String longitude
+  o String readingTime
   --> Shipment shipment
 }
- 
+
+/**
+ * An event - when the acceleration event has been detected
+ */
+event AccelerationThresholdEvent {
+  o String message
+  o Double accel_x
+  o Double accel_y
+  o Double accel_z
+  o String latitude
+  o String longitude
+  o String readingTime
+  --> Shipment shipment
+}
+
 /**
  * An event - when the ship arrives at the port
  */
 event ShipmentInPortEvent {
   o String message
   --> Shipment shipment
-}
-
-/**
- * JUST FOR INITIALIZING A DEMO
- */
-transaction SetupDemo {
 }

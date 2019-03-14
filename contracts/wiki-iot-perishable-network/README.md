@@ -24,7 +24,7 @@ Submit a `SetupDemo` transaction:
 
 ```
 {
-  "$class": "org.acme.shipping.perishable.SetupDemo"
+  "$class": "org.acme.shipping.wiki_perishable.SetupDemo"
 }
 ```
 
@@ -34,9 +34,12 @@ Submit a `TemperatureReading` transaction:
 
 ```
 {
-  "$class": "org.acme.shipping.perishable.TemperatureReading",
-  "centigrade": 8,
-  "shipment": "resource:org.acme.shipping.perishable.Shipment#SHIP_001"
+  "$class": "org.acme.shipping.wiki_perishable.TemperatureReading",
+  "celsius": 8,
+  "latitude": "40.6840",
+  "longitude":"74.0062",
+  "readingTime": "2018-03-22T17:31:36.229Z",
+  "shipment": "resource:org.acme.shipping.wiki_perishable.Shipment#SHIP_001"
 }
 ```
 
@@ -46,8 +49,8 @@ Submit a `ShipmentReceived` transaction for `SHIP_001` to trigger the payout to 
 
 ```
 {
-  "$class": "org.acme.shipping.perishable.ShipmentReceived",
-  "shipment": "resource:org.acme.shipping.perishable.Shipment#SHIP_001"
+  "$class": "org.acme.shipping.wiki_perishable.ShipmentReceived",
+  "shipment": "resource:org.acme.shipping.wiki_perishable.Shipment#SHIP_001"
 }
 ```
 
@@ -57,13 +60,14 @@ Submit a `GpsReading` transaction:
 
 ```
 {
-  "$class": "org.acme.shipping.perishable.GpsReading",
+  "$class": "org.acme.shipping.wiki_perishable.GpsReading",
   "readingTime": "120000",
   "readingDate": "20171024",
   "latitude":"40.6840",
   "latitudeDir":"N",
   "longitude":"74.0062",
-  "laongitudeDir":"W",
+  "longitudeDir":"W",
+  "shipment": "resource:org.acme.shipping.wiki_perishable.Shipment#SHIP_001"
 }
 ```
 
