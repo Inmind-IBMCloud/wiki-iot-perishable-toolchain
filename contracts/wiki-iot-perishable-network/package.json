@@ -3,11 +3,12 @@
     "composer": "^0.20.4"
   },
   "name": "wiki-iot-perishable-network",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "IoT Perishable Network For Wikinet Project",
   "scripts": {
-    "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/wiki-iot-perishable-network@0.0.2.bna",
+    "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/wiki-iot-perishable-network@0.0.3.bna",
     "pretest": "npm run lint",
+    "test": "mocha -t 0 --recursive && cucumber-js",
     "lint": "eslint ."
   },
   "keywords": [
@@ -30,6 +31,7 @@
     "eslint": "latest",
     "nyc": "latest",
     "mkdirp": "latest",
-    "mocha": "latest"
+    "mocha": "latest",
+    "sinon": "latest"
   }
 }
